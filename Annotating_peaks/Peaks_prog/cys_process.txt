@@ -1,3 +1,5 @@
+SEGMENTS THAT CONTAIN ONLY FIFTH CYSTEIN:
+
       ly1+S-S+hi(14-225) -3H2O+(S-S)
          ly1+S-S+hi(2-225)-NH3+(S-S)
    ly1+S-S+hi(2-225) -3H2O-NH3+(S-S)
@@ -32,3 +34,22 @@
       ly2+S-S+hi(22-227) -2H2O+(S-S)
 
 IN TOTAL: 32
+
+
+
+NUMBER OF SEGMENTS THAT COVER CYSTEINS WITH THEIR LEFTEST/RIGHTEST END:
+cystein 2:  14
+cystein 3:  9
+cystein 4:  0
+
+
+NUMBER OF SEGMENTS THAT CONTAIN Nth CYSTEIN:
+cystein 1:  63
+cystein 5:  45
+
+
+
+NUMBER OF SEGMENTS THAT CONTAIN ONLY Nth CYSTEIN:
+cystein 1:  51
+cystein 5:  32
+

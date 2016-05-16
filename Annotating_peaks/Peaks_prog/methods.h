@@ -16,5 +16,7 @@ int peak_search(um_lda& annot, um_ldld& anmass, vector<int>& done, long double d
 
 //tell me more about cysteins in modified peaks
 void fifthCyst();
+int LRtest(int i);
+pair<int, int> FlastSeg(int i);
 
 #endif
