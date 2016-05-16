@@ -91,5 +91,7 @@ int main(){
 
 	check_maps(lchain, hchain);
 
+	fifthCyst();
+
 	return 0;
 }

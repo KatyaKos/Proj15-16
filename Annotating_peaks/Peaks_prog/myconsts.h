@@ -1,10 +1,11 @@
 #ifndef _MYCONSTS_H_
 #define _MYCONSTS_H_
 
-#define AMINO_FILE "/home/student/Practice/aminos.in"
-#define SPECTRUM_FILE "/home/student/Practice/mass_spectrum.msalign"
-#define CHAINS_FILE "/home/student/Practice/trastu-fab.fasta"
-#define RESULT_FILE "/home/student/Practice/Annotating_peaks/annotated_peaks.txt"
+#define AMINO_FILE "/home/student/BioinfProj/Proj15-16/Annotating_peaks/aminos.in"
+#define SPECTRUM_FILE "/home/student/BioinfProj/Proj15-16/Annotating_peaks/mass_spectrum.msalign"
+#define CHAINS_FILE "/home/student/BioinfProj/Proj15-16/Annotating_peaks/trastu-fab.fasta"
+#define RESULT_FILE "/home/student/BioinfProj/Proj15-16/Annotating_peaks/Peaks_prog/annotated_peaks.txt"
+#define CYS_PROCESS_FILE "/home/student/BioinfProj/Proj15-16/Annotating_peaks/Peaks_prog/cys_process.txt"
 
 const int BUFFN = 50;
 const long double MNH3 = 17.03052;

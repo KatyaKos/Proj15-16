@@ -31,7 +31,7 @@ void Read_peaks(){
 }
 
 
-string what_is_lost(int h, int n, int c){
+string Printer::lost_atoms(int h, int n, int c){
 	string lost = "";
 	if (h == 1) lost += "-H2O";
 	else if (h > 1) lost += " -" + to_string(h) + "H2O";
@@ -43,10 +43,10 @@ string what_is_lost(int h, int n, int c){
 	return lost;
 }
 
-void print_seg_peak(Atom at, int n){
+void Printer::print_seg_peak(Atom at, int n){
 	int i = at.seg.first, j = at.seg.second;
 	if (i){
-		string lost = what_is_lost(at.numH2O, at.numNH3, at.numCyst);			
+		string lost = lost_atoms(at.numH2O, at.numNH3, at.numCyst);			
 
 		if (i == 1) fout << setw(36) << right << "b" + to_string(j) + lost;
 		else if (j == n) fout << setw(36) << right << "y" + to_string(i) + lost;
@@ -66,6 +66,7 @@ void check_maps(const string& lchain, const string& hchain){
 	fout << "\nFirst column -- peaks, second -- light chain segment, third -- heavy chain segment, fourth -- modified segment\n\n";
 
 	int nl = lchain.size(), nh = hchain.size();
+	Printer pr;
 
 	forn(i, peaks.size()){
 		long double peak = peaks[i];
@@ -75,11 +76,11 @@ void check_maps(const string& lchain, const string& hchain){
 		Atom ath_m = mod_heavy[peak], atl_m = mod_light[peak];
 		Atom ath_s = seg_heavy[peak], atl_s = seg_light[peak];
 
-		print_seg_peak(atl_s, nl);
-		print_seg_peak(ath_s, nh);
+		pr.print_seg_peak(atl_s, nl);
+		pr.print_seg_peak(ath_s, nh);
 
 		if(ath_m.seg.first){
-			string lost = what_is_lost(ath_m.numH2O + atl_m.numH2O, ath_m.numNH3 + atl_m.numNH3, ath_m.numCyst + atl_m.numCyst);
+			string lost = pr.lost_atoms(ath_m.numH2O + atl_m.numH2O, ath_m.numNH3 + atl_m.numNH3, ath_m.numCyst + atl_m.numCyst);
 
 			fout << setw(36) << right << "ly" + to_string(atl_m.seg.first) + "+S-S+hi(" + to_string(ath_m.seg.first) + '-' + to_string(ath_m.seg.second) + ')' + lost;
 		}else fout << setw(36) << right << "None";

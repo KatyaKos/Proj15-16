@@ -9,9 +9,15 @@ using namespace std;
 
 struct Atom{
 	int numH2O, numNH3, numCyst;
-	pair <int, int> seg;\
+	pair <int, int> seg;
 	Atom() = default;
 	Atom(int i, int j, int h, int n, int c): seg(make_pair(i, j)), numCyst(c), numNH3(n), numH2O(h) {}
+};
+
+struct Printer{
+public:
+	string lost_atoms(int h, int n, int c);
+	void print_seg_peak(Atom at, int n);
 };
 
 typedef unordered_map<long double, Atom> um_lda;
