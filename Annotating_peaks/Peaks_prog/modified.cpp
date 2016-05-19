@@ -2,7 +2,7 @@
 
 using namespace std;
 
-int C_preprocess(string chain, vector<int>& place){
+int C_preprocess(const string& chain, vector<int>& place){
 	int num = 0;
 	forn(i, chain.size())
 		if (chain[i] == 'C'){
@@ -19,7 +19,7 @@ int check(long double m, int j){
 	return 0;
 }
 
-int light_peak_search(long double delta, string lchain, int pos, int j){
+int light_peak_search(long double delta, const string& lchain, int pos, int j){
 
 	int n = lchain.size();
 	long double mass = delta + MH2O, prevmass = delta + MH2O;
@@ -79,16 +79,18 @@ int light_peak_search(long double delta, string lchain, int pos, int j){
 	return 0;
 }
 
-int modified_peak_search(vector<int>& done, long double delta, int cyst, string lchain, string hchain, int pos, int posC){
+int modified_peak_search(vector<int>& done, long double delta, int cyst, const string& lchain, const string& hchain, int pos, int posC){
 
 	int j = 0, num = 0;
 
 	int n = hchain.size();
-	long double mass = delta, prevmass;
+	long double mass = delta, prevmass; delta = 0.0;
 
 	for(int i = posC; i < n; i++){
 
 		while (done[j]) j++;
+
+		if (i == n - 1) delta = MH2O;
 
 		char ch = hchain[i];
 		prevmass = mass;
@@ -103,23 +105,23 @@ int modified_peak_search(vector<int>& done, long double delta, int cyst, string 
 			long double peak = peaks[j];
 
 			mass += MCYST * ic;
-			if (light_peak_search(mass, lchain, 0, j)){
+			if (light_peak_search(mass + delta, lchain, 0, j)){
 				mod_heavy[peak] = Atom(pos + 1, i + 1, 0, 0, ic);
 				done[j] = 1; flag = 1; num++; j++;
 				break;
-			}else if (light_peak_search(mass - MH2O, lchain, 0, j)){
+			}else if (light_peak_search(mass + delta - MH2O, lchain, 0, j)){
 				mod_heavy[peak] = Atom(pos + 1, i + 1, 1, 0, ic);
 				done[j] = 1; flag = 1; num++; j++;
 				break;
-			}else if (light_peak_search(mass - 2 * MH2O, lchain, 0, j)){
+			}else if (light_peak_search(mass + delta - 2 * MH2O, lchain, 0, j)){
 				mod_heavy[peak] = Atom(pos + 1, i + 1, 2, 0, ic);
 				done[j] = 1; flag = 1; num++; j++;
 				break;
-			}else if (light_peak_search(mass - MNH3, lchain, 0, j)){
+			}else if (light_peak_search(mass + delta - MNH3, lchain, 0, j)){
 				mod_heavy[peak] = Atom(pos + 1, i + 1, 0, 1, ic);
 				done[j] = 1; flag = 1; num++; j++;
 				break;
-			}else if (light_peak_search(mass - MH2O - MNH3, lchain, 0, j)){
+			}else if (light_peak_search(mass + delta - MH2O - MNH3, lchain, 0, j)){
 				mod_heavy[peak] = Atom(pos + 1, i + 1, 1, 1, ic);
 				done[j] = 1; flag = 1; num++; j++;
 				break;

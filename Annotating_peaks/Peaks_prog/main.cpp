@@ -38,7 +38,8 @@ int main(){
 	seg_num_heavy = chains_normal(hchain, seg_heavy, mass_seg_heavy);
 	chains_modified(lchain, hchain);
 
-	check_maps(lchain, hchain);
+	annotating(lchain, hchain);
+	pict_annotating(lchain, hchain);
 
 	SegCover();
 

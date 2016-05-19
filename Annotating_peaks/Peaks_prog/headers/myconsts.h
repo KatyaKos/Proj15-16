@@ -4,7 +4,8 @@
 #define AMINO_FILE "/home/student/BioinfProj/Proj15-16/Annotating_peaks/aminos.in"
 #define SPECTRUM_FILE "/home/student/BioinfProj/Proj15-16/Annotating_peaks/mass_spectrum.msalign"
 #define CHAINS_FILE "/home/student/BioinfProj/Proj15-16/Annotating_peaks/trastu-fab.fasta"
-#define RESULT_FILE "/home/student/BioinfProj/Proj15-16/Annotating_peaks/Peaks_prog/results/annotated_peaks.txt"
+#define ANNOT_FILE "/home/student/BioinfProj/Proj15-16/Annotating_peaks/Peaks_prog/results/annotated_peaks.txt"
+#define PICT_FILE "/home/student/BioinfProj/Proj15-16/Annotating_peaks/Peaks_prog/results/pictured_peaks.txt"
 #define CYS_PROCESS_FILE "/home/student/BioinfProj/Proj15-16/Annotating_peaks/Peaks_prog/results/cys_process.txt"
 
 const int BUFFN = 50;

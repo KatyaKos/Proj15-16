@@ -40,13 +40,9 @@ int chains_normal(string chain, um_lda& annot, um_ldld& anmass){
 	chain.pop_back();
 	int num = 0;
 
-	for(int i = 1; i < chain.size() - 1; i++){
+	for(int i = 0; i < chain.size(); i++){
 		num += peak_search(annot, anmass, done, 0.0, chain, i);
 	}
-
-	num += peak_search(annot, anmass, done, 0.0, chain, 0);
-	reverse(chain.begin(), chain.end());
-	num += peak_search(annot, anmass, done, MH2O, chain, 0);
 
 	return num;
 }

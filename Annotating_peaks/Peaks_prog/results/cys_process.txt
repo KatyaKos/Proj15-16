@@ -12,8 +12,8 @@ cystein 4:  2
 
 
 NUMBER OF SEGMENTS THAT CONTAIN Nth CYSTEIN:
-cystein 1:  142
-cystein 5:  94
+cystein 1:  130
+cystein 5:  88
 
 
 

@@ -18,6 +18,7 @@ struct Printer{
 public:
 	string lost_atoms(int h, int n, int c);
 	void print_seg_peak(Atom at, int n);
+	void pict_peak(Atom at, const string& chain);
 };
 
 typedef unordered_map<long double, Atom> um_lda;
