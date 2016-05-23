@@ -21,7 +21,8 @@ int modified_peak_search(vector<int>& done, long double delta, int cyst, const s
 int peak_search(um_lda& annot, um_ldld& anmass, vector<int>& done, long double delta, const string& chain, int pos);
 
 //tell me more about cysteins in modified peaks
-void LonelyCyst(int i);
+void Where_is_cyst(int ci);
+void LonelyCyst(int ci);
 pair<int, int> LRtest(int ci);
 
 #endif

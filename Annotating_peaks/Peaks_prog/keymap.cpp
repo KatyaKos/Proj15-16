@@ -49,6 +49,9 @@ int chains_normal(string chain, um_lda& annot, um_ldld& anmass){
 
 void SegCover(){
 	fout.open(CYS_PROCESS_FILE);
+	fout << "SEGMENTS THAT CONTAIN FIFTH CYSTEIN:" << endl << endl;
+	Where_is_cyst(4);
+	fout << endl << endl;
 	fout << "SEGMENTS THAT CONTAIN ONLY FIFTH CYSTEIN:" << endl << endl;
 	LonelyCyst(4);
 

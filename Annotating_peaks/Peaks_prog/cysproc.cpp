@@ -2,6 +2,24 @@
 
 using namespace std;
 
+void Where_is_cyst(int ci){
+	int i = posC_heavy[ci], psz = posC_heavy.size();
+	Printer pr;
+	int n = 0;
+	for (um_lda::iterator it = mod_heavy.begin(); it != mod_heavy.end(); it++){
+		Atom ath = (*it).second, atl = mod_light[(*it).first];
+		int lpos = ath.seg.first, rpos = ath.seg.second;
+
+		if (lpos <= i && rpos >= i){
+			n++;
+			string lost = pr.lost_atoms(ath.numH2O + atl.numH2O, ath.numNH3 + atl.numNH3, ath.numCyst + atl.numCyst);
+
+			fout << setw(36) << right << "ly" + to_string(atl.seg.first) + "+S-S+hi(" + to_string(ath.seg.first) + '-' + to_string(ath.seg.second) + ')' + lost << endl;
+		}
+	}
+	fout << endl << "IN TOTAL: " << n << endl;
+}
+
 void LonelyCyst(int ci){
 
 	int i = posC_heavy[ci], psz = posC_heavy.size();
