@@ -1,16 +1,18 @@
-all: main.o info_work.o modified.o segments.o cysproc.o keymap.o
-	g++ -std=c++11 -o prog main.o info_work.o modified.o segments.o cysproc.o keymap.o
-main.o: main.cpp headers/headers.h
-	g++ -std=c++11 -c main.cpp -o main.o
-info_work.o: info_work.cpp headers/headers.h
-	g++ -std=c++11 -c info_work.cpp -o info_work.o
-modified.o: modified.cpp headers/headers.h
-	g++ -std=c++11 -c modified.cpp -o modified.o
-segments.o: segments.cpp headers/headers.h
-	g++ -std=c++11 -c segments.cpp -o segments.o
-cysproc.o: cysproc.cpp headers/headers.h
-	g++ -std=c++11 -c cysproc.cpp -o cysproc.o
-keymap.o: keymap.cpp headers/headers.h
-	g++ -std=c++11 -c keymap.cpp -o keymap.o
+all: bin/main.o bin/info_work.o bin/modified.o bin/segments.o bin/cysproc.o bin/keymap.o
+	g++ -std=c++11 -o prog bin/main.o bin/info_work.o bin/modified.o bin/segments.o bin/cysproc.o bin/keymap.o
+bin/main.o: cpp/main.cpp headers/headers.h
+	g++ -std=c++11 -c cpp/main.cpp -o bin/main.o
+bin/info_work.o: cpp/info_work.cpp headers/headers.h
+	g++ -std=c++11 -c cpp/info_work.cpp -o bin/info_work.o
+bin/modified.o: cpp/modified.cpp headers/headers.h
+	g++ -std=c++11 -c cpp/modified.cpp -o bin/modified.o
+bin/segments.o: cpp/segments.cpp headers/headers.h
+	g++ -std=c++11 -c cpp/segments.cpp -o bin/segments.o
+bin/cysproc.o: cpp/cysproc.cpp headers/headers.h
+	g++ -std=c++11 -c cpp/cysproc.cpp -o bin/cysproc.o
+bin/keymap.o: cpp/keymap.cpp headers/headers.h
+	g++ -std=c++11 -c cpp/keymap.cpp -o bin/keymap.o
 clean:
 	rm *.o -f
+
+$(shell mkdir -p bin)
