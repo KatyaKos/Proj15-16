@@ -7,6 +7,7 @@
 #define ANNOT_FILE "/home/student/BioinfProj/Proj15-16/Annotating_peaks/Peaks_prog/results/annotated_peaks.txt"
 #define PICT_FILE "/home/student/BioinfProj/Proj15-16/Annotating_peaks/Peaks_prog/results/pictured_peaks.txt"
 #define CYS_PROCESS_FILE "/home/student/BioinfProj/Proj15-16/Annotating_peaks/Peaks_prog/results/cys_process.txt"
+#define MOD_FILE "/home/student/BioinfProj/Proj15-16/Annotating_peaks/Peaks_prog/results/modified_peaks.txt"
 
 const int BUFFN = 50;
 const long double MNH3 = 17.03052;

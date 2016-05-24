@@ -34,14 +34,18 @@ int main(){
 	getline(fin, hchain);
 	fin.close();
 
+	lchain.pop_back();
+	hchain.pop_back();
+
 	seg_num_light = chains_normal(lchain, seg_light, mass_seg_light);
 	seg_num_heavy = chains_normal(hchain, seg_heavy, mass_seg_heavy);
 	chains_modified(lchain, hchain);
 
-	annotating(lchain, hchain);
+	//annotating(lchain, hchain);
 	pict_annotating(lchain, hchain);
+	//modified_annotating(lchain, hchain);
 
-	SegCover();
+	SegCover(lchain, hchain);
 
 	return 0;
 }

@@ -34,10 +34,10 @@ void Read_peaks(){
 inline string Printer::lost_atoms(int h, int n, int c){
 	string lost = "";
 	if (h == 1) lost += "-H2O";
-	else if (h > 1) lost += " -" + to_string(h) + "H2O";
+	else if (h > 1) lost += "-" + to_string(h) + "H2O";
 	if (n == 1) lost += "-NH3";
-	else if (n > 1) lost += " -" + to_string(n) + "NH3";
-	if (c == 1) lost += "+(S-S)";
+	else if (n > 1) lost += "-" + to_string(n) + "NH3";
+	if (c == 1) lost += "-(S-S)";
 	else if (c > 1) lost += "-" + to_string(c) + "(S-S)";
 
 	return lost;

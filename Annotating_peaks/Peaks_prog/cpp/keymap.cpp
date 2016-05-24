@@ -7,9 +7,7 @@ void chains_modified(string lchain, string hchain){
 	vector <int> done;
 	done.assign(peaks.size(), 0);
 
-	lchain.pop_back();
 	reverse(lchain.begin(), lchain.end());
-	hchain.pop_back();
 
 	int num_hC = C_preprocess(hchain, posC_heavy);
 	mod_num = 0;
@@ -32,12 +30,11 @@ void chains_modified(string lchain, string hchain){
 }
 
 
-int chains_normal(string chain, um_lda& annot, um_ldld& anmass){
+int chains_normal(const string& chain, um_lda& annot, um_ldld& anmass){
 
 	vector <int> done;
 	done.assign(peaks.size(), 0);
 
-	chain.pop_back();
 	int num = 0;
 
 	for(int i = 0; i < chain.size(); i++){
@@ -47,10 +44,10 @@ int chains_normal(string chain, um_lda& annot, um_ldld& anmass){
 	return num;
 }
 
-void SegCover(){
+void SegCover(const string& lchain, const string& hchain){
 	fout.open(CYS_PROCESS_FILE);
 	fout << "SEGMENTS THAT CONTAIN FIFTH CYSTEIN:" << endl << endl;
-	Where_is_cyst(4);
+	Where_is_cyst(4, lchain, hchain);
 	fout << endl << endl;
 	fout << "SEGMENTS THAT CONTAIN ONLY FIFTH CYSTEIN:" << endl << endl;
 	LonelyCyst(4);
