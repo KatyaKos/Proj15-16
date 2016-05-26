@@ -9,6 +9,8 @@
 #define CYS_PROCESS_FILE "/home/student/BioinfProj/Proj15-16/Annotating_peaks/Peaks_prog/results/cys_process.txt"
 #define MOD_FILE "/home/student/BioinfProj/Proj15-16/Annotating_peaks/Peaks_prog/results/modified_peaks.txt"
 
+#define forn(i, n) for (int i = 0; i < n; i++)
+
 const int BUFFN = 50;
 const long double MNH3 = 17.03052;
 const long double MH2O = 18.01528;

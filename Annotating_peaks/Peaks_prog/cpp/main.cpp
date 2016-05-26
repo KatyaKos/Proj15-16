@@ -6,25 +6,18 @@ ifstream fin;
 ofstream fout;
 
 unordered_map<char, long double> am_wght;
-
-um_lda seg_light;
-um_lda seg_heavy;
-um_lda mod_light;
-um_lda mod_heavy;
-
-um_ldld mass_seg_light;
-um_ldld mass_seg_heavy;
-um_ldld mass_mod;
-
-vector<int> posC_heavy;
 vector<long double> peaks;
 
-int seg_num_heavy, seg_num_light, mod_num;
+bool comp(const ModifiedChains& a, const ModifiedChains& b){
+	if (a.nhcyst == 4) return 1;
+	if (b.nhcyst == 4) return 0;
+	return (a.seg_num > b.seg_num);
+}
 
 int main(){
 
-	Read_weights();
-	Read_peaks();
+	Reader rd;
+	rd.Read();
 
 	string lchain, hchain;
 	fin.open(CHAINS_FILE);
@@ -37,15 +30,13 @@ int main(){
 	lchain.pop_back();
 	hchain.pop_back();
 
-	seg_num_light = chains_normal(lchain, seg_light, mass_seg_light);
-	seg_num_heavy = chains_normal(hchain, seg_heavy, mass_seg_heavy);
-	chains_modified(lchain, hchain);
+	Antibody ant(lchain, hchain);
+	ant.Calculate();
 
-	//annotating(lchain, hchain);
-	pict_annotating(lchain, hchain);
+	Printer pr(ant);
+	pr.Segments_Cover(comp);
+
 	//modified_annotating(lchain, hchain);
-
-	SegCover(lchain, hchain);
 
 	return 0;
 }

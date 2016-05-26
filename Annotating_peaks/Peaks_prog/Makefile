@@ -1,18 +1,20 @@
-all: bin/main.o bin/info_work.o bin/modified.o bin/segments.o bin/cysproc.o bin/keymap.o
-	g++ -std=c++11 -o prog bin/main.o bin/info_work.o bin/modified.o bin/segments.o bin/cysproc.o bin/keymap.o
+all: bin/main.o bin/printer.o bin/modchain.o bin/nonmodChain.o bin/antibody.o bin/chain.o bin/reader.o
+	g++ -std=c++11 -o prog bin/main.o bin/printer.o bin/modchain.o bin/nonmodChain.o bin/reader.o bin/antibody.o bin/chain.o
 bin/main.o: cpp/main.cpp headers/headers.h
 	g++ -std=c++11 -c cpp/main.cpp -o bin/main.o
-bin/info_work.o: cpp/info_work.cpp headers/headers.h
-	g++ -std=c++11 -c cpp/info_work.cpp -o bin/info_work.o
-bin/modified.o: cpp/modified.cpp headers/headers.h
-	g++ -std=c++11 -c cpp/modified.cpp -o bin/modified.o
-bin/segments.o: cpp/segments.cpp headers/headers.h
-	g++ -std=c++11 -c cpp/segments.cpp -o bin/segments.o
-bin/cysproc.o: cpp/cysproc.cpp headers/headers.h
-	g++ -std=c++11 -c cpp/cysproc.cpp -o bin/cysproc.o
-bin/keymap.o: cpp/keymap.cpp headers/headers.h
-	g++ -std=c++11 -c cpp/keymap.cpp -o bin/keymap.o
+bin/printer.o: cpp/printer.cpp headers/headers.h
+	g++ -std=c++11 -c cpp/printer.cpp -o bin/printer.o
+bin/reader.o: cpp/reader.cpp headers/headers.h
+	g++ -std=c++11 -c cpp/reader.cpp -o bin/reader.o
+bin/antibody.o: cpp/antibody.cpp headers/headers.h
+	g++ -std=c++11 -c cpp/antibody.cpp -o bin/antibody.o
+bin/chain.o: cpp/chain.cpp headers/headers.h
+	g++ -std=c++11 -c cpp/chain.cpp -o bin/chain.o
+bin/modchain.o: cpp/modchain.cpp headers/headers.h
+	g++ -std=c++11 -c cpp/modchain.cpp -o bin/modchain.o
+bin/nonmodChain.o: cpp/nonmodChain.cpp headers/headers.h
+	g++ -std=c++11 -c cpp/nonmodChain.cpp -o bin/nonmodChain.o
 clean:
-	rm *.o -f
+	rm bin/*.o -f
 
 $(shell mkdir -p bin)

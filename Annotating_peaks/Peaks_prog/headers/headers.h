@@ -4,6 +4,6 @@
 #include "info.h"
 #include "myconsts.h"
 #include "methods.h"
-//o
+
 
 #endif

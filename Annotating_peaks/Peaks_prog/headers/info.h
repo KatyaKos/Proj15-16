@@ -2,45 +2,47 @@
 #define _INFO_H_
 
 #include  <bits/stdc++.h>
+#include "antibody.h"
 
 using namespace std;
-
-#define forn(i, n) for (int i = 0; i < n; i++)
-
-struct Atom{
-	int numH2O, numNH3, numCyst;
-	pair <int, int> seg;
-	Atom() = default;
-	Atom(int i, int j, int h, int n, int c): seg(make_pair(i, j)), numCyst(c), numNH3(n), numH2O(h) {}
-};
-
-struct Printer{
-public:
-	string lost_atoms(int h, int n, int c);
-	void print_seg_peak(Atom at, int n);
-	void pict_peak(Atom at, const string& chain);
-};
-
-typedef unordered_map<long double, Atom> um_lda;
-typedef unordered_map<long double, long double> um_ldld;
 
 extern ifstream fin;
 extern ofstream fout;
 
 extern unordered_map<char, long double> am_wght;
-
-extern um_lda seg_light;
-extern um_lda seg_heavy;
-extern um_lda mod_light;
-extern um_lda mod_heavy;
-
-extern um_ldld mass_seg_light;
-extern um_ldld mass_seg_heavy;
-extern um_ldld mass_mod;
-
-extern vector<int> posC_heavy;
 extern vector<long double> peaks;
 
-extern int seg_num_heavy, seg_num_light, mod_num;
+class Reader{
+private:
+	void Read_weights();
+	void Read_peaks();
+public:
+	void Read();
+};
+
+class Printer{
+private:
+	Antibody ant;
+	vector<int> mod_pos;
+
+	string lost_atoms(int h, int n, int c);
+	void print_seg_peak(const Atom& at, int n);
+	void print_pict_peak(const Atom& at, const string& chain);
+
+	void connect(bool (*comp)(const ModifiedChains&, const ModifiedChains&));
+
+	void where_is_cyst(int ci);
+	void lonely_cyst(int ci);
+	pair<int, int> LRtest(int ci);
+
+public:
+	Printer(Antibody ant): ant(ant) {
+		mod_pos.assign(peaks.size(), -1);
+	}
+
+	void Annotate(bool (*comp)(const ModifiedChains&, const ModifiedChains&));
+	void Pict_Annotate(bool (*comp)(const ModifiedChains&, const ModifiedChains&));
+	void Segments_Cover(bool (*comp)(const ModifiedChains&, const ModifiedChains&));
+};
 
 #endif
