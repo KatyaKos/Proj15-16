@@ -34,7 +34,7 @@ int main(){
 	ant.Calculate();
 
 	Printer pr(ant);
-	pr.Segments_Cover(comp);
+	pr.Modified_Annotate(comp);
 
 	//modified_annotating(lchain, hchain);
 

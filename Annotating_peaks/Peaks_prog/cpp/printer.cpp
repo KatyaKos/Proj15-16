@@ -26,6 +26,14 @@ inline void Printer::print_seg_peak(const Atom& at, int n){
 	}else fout << setw(36) << right << "None";
 }
 
+inline void Printer::print_mod_peak(const Atom& atl, const Atom& ath){
+	int nl = ant.lchain.size();
+	string lost = lost_atoms(ath.numH2O + atl.numH2O, ath.numNH3 + atl.numNH3, ath.numCyst + atl.numCyst);
+
+	fout << setw(36) << right << "ly" + to_string(nl - atl.seg.first + 1) + "+S-S+hi(" + to_string(ath.seg.first) + '-' + to_string(ath.seg.second) + ')' + lost;
+			
+}
+
 inline void Printer::print_pict_peak(const Atom& at, const string& chain){
 	int i = at.seg.first, j = at.seg.second;
 	if (i){
@@ -37,6 +45,7 @@ inline void Printer::print_pict_peak(const Atom& at, const string& chain){
 void Printer::connect(bool (*comp)(const ModifiedChains&, const ModifiedChains&)){
 	sort(ant.mod_seg.begin(), ant.mod_seg.end(), comp);
 	int nm = ant.mod_seg.size();
+
 
 	forn(i, peaks.size()){
 		long double peak = peaks[i];
@@ -166,6 +175,59 @@ pair<int, int> Printer::LRtest(int ci){
 }
 
 
+void Printer::print_cyst_group(int nC){
+	fout << endl << "PEAK " << nC + 1 << endl;
+	fout << "------------------------------------------" << endl;
+
+	ModifiedChains mc = ant.mod_seg[nC];
+	um_lda seg_light = mc.seg_light;
+	um_lda seg_heavy = mc.seg_heavy;
+	int nsz = peaks.size();
+	vector<long double> None, OneH, OneN, HandN, TwoH, Other;
+
+	forn(i, nsz){
+		if (mc.done[i]){
+			long double peak = peaks[i];
+			Atom ath = seg_heavy[peak], atl = seg_light[peak];
+			int nH = ath.numH2O + atl.numH2O, nN = ath.numNH3 + atl.numNH3;
+			if (!nH && !nN) None.push_back(peak);
+			else if (nH == 1 && !nN) OneH.push_back(peak);
+			else if (!nH && nN == 1) OneN.push_back(peak);
+			else if (nH == 1 && nN == 1) HandN.push_back(peak);
+			else if (nH == 2 && !nN) TwoH.push_back(peak);
+			else Other.push_back(peak);
+		}
+	}
+
+	long double peak;
+	forn(i, None.size()){
+		peak = None[i];
+		fout << peak << ":  "; print_mod_peak(seg_light[peak], seg_heavy[peak]); fout << endl;
+	}
+	forn(i, OneH.size()){
+		peak = OneH[i];
+		fout << peak << ":  "; print_mod_peak(seg_light[peak], seg_heavy[peak]); fout << endl;
+	}
+	forn(i, OneN.size()){
+		peak = OneN[i];
+		fout << peak << ":  "; print_mod_peak(seg_light[peak], seg_heavy[peak]); fout << endl;
+	}
+	forn(i, HandN.size()){
+		peak = HandN[i];
+		fout << peak << ":  "; print_mod_peak(seg_light[peak], seg_heavy[peak]); fout << endl;
+	}
+	forn(i, TwoH.size()){
+		peak = TwoH[i];
+		fout << peak << ":  "; print_mod_peak(seg_light[peak], seg_heavy[peak]); fout << endl;
+	}
+	forn(i, Other.size()){
+		peak = Other[i];
+		fout << peak << ":  "; print_mod_peak(seg_light[peak], seg_heavy[peak]); fout << endl;
+	}
+	
+	fout << "------------------------------------------" << endl;
+}
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -191,9 +253,7 @@ void Printer::Annotate(bool (*comp)(const ModifiedChains&, const ModifiedChains&
 		int j = mod_pos[i];
 		if(j != -1){
 			Atom ath_m = ant.mod_seg[j].seg_heavy[peak], atl_m = ant.mod_seg[j].seg_light[peak];
-			string lost = lost_atoms(ath_m.numH2O + atl_m.numH2O, ath_m.numNH3 + atl_m.numNH3, ath_m.numCyst + atl_m.numCyst);
-
-			fout << setw(36) << right << "ly" + to_string(atl_m.seg.first) + "+S-S+hi(" + to_string(ath_m.seg.first) + '-' + to_string(ath_m.seg.second) + ')' + lost;
+			print_mod_peak(atl_m, ath_m);
 		} else fout << setw(36) << right << "None";
 		fout << endl;
 
@@ -245,9 +305,7 @@ void Printer::Pict_Annotate(bool (*comp)(const ModifiedChains&, const ModifiedCh
 		if(j != -1){
 
 			Atom ath_m = ant.mod_seg[j].seg_heavy[peak], atl_m = ant.mod_seg[j].seg_light[peak];
-			string lost = lost_atoms(ath_m.numH2O + atl_m.numH2O, ath_m.numNH3 + atl_m.numNH3, ath_m.numCyst + atl_m.numCyst);
-
-			fout << setw(36) << right << "ly" + to_string(nl - atl_m.seg.first + 1) + "+S-S+hi(" + to_string(ath_m.seg.first) + '-' + to_string(ath_m.seg.second) + ')' + lost;
+			print_mod_peak(atl_m, ath_m);
 			fout << endl;
 			print_pict_peak(atl_m, ant.lchain); fout << "<-->"; print_pict_peak(ath_m, ant.hchain);
 		
@@ -291,5 +349,19 @@ void Printer::Segments_Cover(bool (*comp)(const ModifiedChains&, const ModifiedC
 	fout << endl << endl << "NUMBER OF MODIFIED SEGMENTS THAT CONTAIN ONLY Nth CYSTEIN:" << endl;
 	fout << "cystein 1:  " << pf.second << endl << "cystein " << psz << ":  " << pl.second << endl << endl;
 
+	fout.close();
+}
+
+void Printer::Modified_Annotate(bool (*comp)(const ModifiedChains&, const ModifiedChains&)){
+	fout.open(MOD_FILE);
+
+	connect(comp);
+	int nC = ant.posC_heavy.size();
+
+	print_cyst_group(4);
+	forn(i, nC){
+		if (i == 4) continue;
+		print_cyst_group(i);
+	}
 	fout.close();
 }

@@ -27,6 +27,7 @@ private:
 
 	string lost_atoms(int h, int n, int c);
 	void print_seg_peak(const Atom& at, int n);
+	void print_mod_peak(const Atom& atl, const Atom& ath);
 	void print_pict_peak(const Atom& at, const string& chain);
 
 	void connect(bool (*comp)(const ModifiedChains&, const ModifiedChains&));
@@ -34,6 +35,8 @@ private:
 	void where_is_cyst(int ci);
 	void lonely_cyst(int ci);
 	pair<int, int> LRtest(int ci);
+
+	void print_cyst_group(int nC);
 
 public:
 	Printer(Antibody ant): ant(ant) {
@@ -43,6 +46,7 @@ public:
 	void Annotate(bool (*comp)(const ModifiedChains&, const ModifiedChains&));
 	void Pict_Annotate(bool (*comp)(const ModifiedChains&, const ModifiedChains&));
 	void Segments_Cover(bool (*comp)(const ModifiedChains&, const ModifiedChains&));
+	void Modified_Annotate(bool (*comp)(const ModifiedChains&, const ModifiedChains&));
 };
 
 #endif
