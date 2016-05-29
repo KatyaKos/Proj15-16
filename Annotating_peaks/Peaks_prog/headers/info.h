@@ -10,7 +10,6 @@ extern ifstream fin;
 extern ofstream fout;
 
 extern unordered_map<char, long double> am_wght;
-extern vector<long double> peaks;
 
 class Reader{
 private:

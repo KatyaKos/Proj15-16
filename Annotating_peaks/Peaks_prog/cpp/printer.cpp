@@ -8,8 +8,8 @@ inline string Printer::lost_atoms(int h, int n, int c){
 	else if (h > 1) lost += "-" + to_string(h) + "H2O";
 	if (n == 1) lost += "-NH3";
 	else if (n > 1) lost += "-" + to_string(n) + "NH3";
-	if (c == 1) lost += "-(S-S)";
-	else if (c > 1) lost += "-" + to_string(c) + "(S-S)";
+	if (c == 1) lost += "+(S-S)";
+	else if (c > 1) lost += "+" + to_string(c) + "(S-S)";
 
 	return lost;
 }
@@ -29,7 +29,7 @@ inline void Printer::print_seg_peak(const Atom& at, int n){
 inline void Printer::print_mod_peak(const Atom& atl, const Atom& ath){
 	int nl = ant.lchain.size();
 	string lost = lost_atoms(ath.numH2O + atl.numH2O, ath.numNH3 + atl.numNH3, ath.numCyst + atl.numCyst);
-
+	//cout << atl.seg.first << ' ' << nl - atl.seg.first + 1 << endl;
 	fout << setw(36) << right << "ly" + to_string(nl - atl.seg.first + 1) + "+S-S+hi(" + to_string(ath.seg.first) + '-' + to_string(ath.seg.second) + ')' + lost;
 			
 }
@@ -58,6 +58,7 @@ void Printer::connect(bool (*comp)(const ModifiedChains&, const ModifiedChains&)
 			}
 		}
 	}
+	//forn(i, mod_pos.size()) cout << mod_pos[i] << '\n';
 }
 
 void Printer::where_is_cyst(int ci){
@@ -176,7 +177,7 @@ pair<int, int> Printer::LRtest(int ci){
 
 
 void Printer::print_cyst_group(int nC){
-	fout << endl << "PEAK " << nC + 1 << endl;
+	fout << endl << "CYSTEIN " << nC + 1 << endl;
 	fout << "------------------------------------------" << endl;
 
 	ModifiedChains mc = ant.mod_seg[nC];
@@ -307,7 +308,7 @@ void Printer::Pict_Annotate(bool (*comp)(const ModifiedChains&, const ModifiedCh
 			Atom ath_m = ant.mod_seg[j].seg_heavy[peak], atl_m = ant.mod_seg[j].seg_light[peak];
 			print_mod_peak(atl_m, ath_m);
 			fout << endl;
-			print_pict_peak(atl_m, ant.lchain); fout << "<-->"; print_pict_peak(ath_m, ant.hchain);
+			print_pict_peak(atl_m, ant.lchain); fout << "<--\n-->"; print_pict_peak(ath_m, ant.hchain);
 		
 		}else fout << setw(36) << right << "None" << endl;
 		

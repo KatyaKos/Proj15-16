@@ -17,18 +17,16 @@ void Antibody::Calculate(){
 	lseg.chain_process();
 	hseg.chain_process();
 
-	C_preprocess();
+	light_num = lseg.seg_num, heavy_num = hseg.seg_num;
 
+	C_preprocess();
 	int nhC = posC_heavy.size();
+	if (!nhC) return;
 	forn(ii, nhC)
 		mod_seg.push_back(ModifiedChains(*this, ii));
 
 	reverse(lchain.begin(), lchain.end());
-	forn(ii, nhC){
-		mod_seg[ii].chain_process(ii);
-	}
+	unite.chain_process();
 	reverse(lchain.begin(), lchain.end());
-
-	light_num = lseg.seg_num, heavy_num = hseg.seg_num;
 
 }

@@ -19,6 +19,11 @@ int main(){
 	Reader rd;
 	rd.Read();
 
+	/*long double mass = -2*MH2O+MCYST;
+	string s = "CSRWGGDGFYAMDYWGQGTLVTVSSASTKGPSVFPLAPSSKSTSGGTAALGCLVKDYFPEPVTVSWNSGALTSGVHTFPAVLQSSGLYSLSSVVTVPSSSLGTQTYICNV";
+	for (char c : s) mass += am_wght[c];
+	cout << mass << endl;*/
+
 	string lchain, hchain;
 	fin.open(CHAINS_FILE);
 	getline(fin, lchain);
@@ -34,9 +39,10 @@ int main(){
 	ant.Calculate();
 
 	Printer pr(ant);
-	pr.Modified_Annotate(comp);
-
-	//modified_annotating(lchain, hchain);
+	//pr.Annotate(comp);
+	pr.Pict_Annotate(comp);
+	//pr.Segments_Cover(comp);
+	//pr.Modified_Annotate(comp);
 
 	return 0;
 }

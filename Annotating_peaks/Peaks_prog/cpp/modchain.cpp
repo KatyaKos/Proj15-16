@@ -2,26 +2,62 @@
 
 using namespace std;
 
-int ModifiedChains::light_peak_search(long double delta, int pos, int j){
+void ModifiedChains::heavy_search(long double mass, int nH, int nN, int nC, int pos){
+	string chain = ant.hchain;
+	int n = chain.size(), psz = done.size(), nl = ant.lchain.size();
 
-	int n = ant.lchain.size();
-	long double mass = delta + MH2O, prevmass = delta + MH2O;
-	int cyst = -1;
-	long double peak = peaks[j];
+	forn(i, n){
+		peak_search(seg_heavy, done, chain, mass, i);
+		int l, r;
+		forn(j, psz){
+			if (done[j] != 1) continue;
+			long double peak = peaks[j];
+			l = lower_bound(ant.posC_heavy.begin(), ant.posC_heavy.end(), seg_heavy[peak].seg.first - 1) - ant.posC_heavy.begin();
+			r = upper_bound(ant.posC_heavy.begin(), ant.posC_heavy.end(), seg_heavy[peak].seg.second - 1) - ant.posC_heavy.begin();
+			//cout << l << ' ' << r << endl;
 
-	while (mass + am_wght[ant.lchain[pos]] < peak * 0.99999){
-		if (ant.lchain[pos] == 'C'){
-			cyst++;
+			if (r - l <= 0){
+				done[j] = 0;
+				mass_seg[peak] = 0.0;
+				//seg_heavy[peak] = Atom(0, 0, 0, 0, 0);
+			}else{
+				done[j] = 2;
+				seg_light[peak] = Atom(nl - pos, n, nH, nN, nC);
+				for (int u = l; u < r; u++){
+					//cout << u << ' ';
+					ant.mod_seg[u].done[j] = 1;
+					ant.mod_seg[u].seg_num++;
+					ant.mod_seg[u].seg_light[peak] = Atom(nl - pos, n, nH, nN, nC);
+					ant.mod_seg[u].seg_heavy[peak] = seg_heavy[peak];
+					ant.mod_seg[u].mass_seg[peak] = mass_seg[peak];
+				}
+			}
 		}
-		mass += am_wght[ant.lchain[pos]];
-		pos++;
 
-		if (pos == ant.lchain.size()) return 0;
 	}
+}
+
+void ModifiedChains::chain_process(){
+	string chain = ant.lchain;
+
+	int n = chain.size();
+	long double mass = MH2O + MCYST;
+	int cyst = -1, pos = 0;
+
+	while (cyst == -1 && pos < n){
+		char ch = chain[pos];
+		mass += am_wght[ch];
+		if (ch == 'C') cyst++;
+		pos++;
+	}
+	if (cyst == -1) return;
+	pos--; mass -=am_wght['C']; cyst--;
 
 	for(int i = pos; i < n; i++){
 
-		char ch = ant.lchain[i];
+		if (!(i % 50)) cout << i << endl;
+
+		char ch = chain[i];
 		if (ch == 'C'){
 			cyst++;
 		}
@@ -30,114 +66,18 @@ int ModifiedChains::light_peak_search(long double delta, int pos, int j){
 		forn(ic, cyst / 2 + 1){
 
 			mass += MCYST * ic;
-			if (check(mass, j)){
-				seg_light[peak] = Atom(n - i, n, 0, 0, ic);
-				mass_seg[peak] = mass;
-				return 1;
-			}else if (check(mass - MH2O, j)){
-				seg_light[peak] = Atom(n - i, n, 1, 0, ic);
-				mass_seg[peak] = mass - MH2O;
-				return 1;
-			}else if (check(mass - 2 * MH2O, j)){
-				seg_light[peak] = Atom(n - i, n, 2, 0, ic);
-				mass_seg[peak] = mass - 2 * MH2O;
-				return 1;
-			}else if (check(mass - MNH3, j)){
-				seg_light[peak] = Atom(n - i, n, 0, 1, ic);
-				mass_seg[peak] = mass - MNH3;
-				return 1;
-			}else if (check(mass - MH2O - MNH3, j)){
-				seg_light[peak] = Atom(n - i, n, 1, 1, ic);
-				mass_seg[peak] = mass - MH2O - MNH3;
-				return 1;
-			}
+
+			heavy_search(mass, 0, 0, ic, i);
+			heavy_search(mass - MH2O, 1, 0, ic, i);
+			heavy_search(mass - MNH3, 0, 1, ic, i);
+			heavy_search(mass - 2 * MH2O, 2, 0, ic, i);
+			heavy_search(mass - MH2O - MNH3, 1, 1, ic, i);
+
 			mass -= MCYST * ic;
 		}
-
-		if (mass > peak * 1.00001){
-			return 0;
-		}
 	}
 
-	return 0;
-}
-
-void ModifiedChains::peak_search(long double delta, int cyst, int pos, int nC){
-
-	int j = 0, posC = ant.posC_heavy[nC], nsz = peaks.size();
-
-	int n = ant.hchain.size();
-	long double mass = delta, prevmass; delta = 0.0;
-
-	for(int i = posC; i < n; i++){
-
-		while (done[j]){
-			j++;
-			if (j == nsz) return;
-		}
-
-		if (i == n - 1) delta = MH2O;
-
-		char ch = ant.hchain[i];
-		prevmass = mass;
-		if (ch == 'C'){
-			cyst++;
-		}
-		mass += am_wght[ch];
-		
-		int flag = 0;
-		long double peak = peaks[j];
-		
-		forn(ic, cyst / 2 + 1){
-
-			mass += MCYST * ic;
-			if (light_peak_search(mass + delta, 0, j)){
-				seg_heavy[peak] = Atom(pos + 1, i + 1, 0, 0, ic);
-				done[j] = 1; flag = 1; seg_num++; j++;
-				break;
-			}else if (light_peak_search(mass + delta - MH2O, 0, j)){
-				seg_heavy[peak] = Atom(pos + 1, i + 1, 1, 0, ic);
-				done[j] = 1; flag = 1; seg_num++; j++;
-				break;
-			}else if (light_peak_search(mass + delta - 2 * MH2O, 0, j)){
-				seg_heavy[peak] = Atom(pos + 1, i + 1, 2, 0, ic);
-				done[j] = 1; flag = 1; seg_num++; j++;
-				break;
-			}else if (light_peak_search(mass + delta - MNH3, 0, j)){
-				seg_heavy[peak] = Atom(pos + 1, i + 1, 0, 1, ic);
-				done[j] = 1; flag = 1; seg_num++; j++;
-				break;
-			}else if (light_peak_search(mass + delta - MH2O - MNH3, 0, j)){
-				seg_heavy[peak] = Atom(pos + 1, i + 1, 1, 1, ic);
-				done[j] = 1; flag = 1; seg_num++; j++;
-				break;
-			}
-			mass -= MCYST * ic;
-		}
-
-		if (!flag && mass > peaks[j] * 1.00001){
-			j++;
-			mass = prevmass;
-			i--;
-			if (ch == 'C') cyst--;
-		}
-
-	}
-}
-
-void ModifiedChains::chain_process(int ii){
-
-	int i = ant.posC_heavy[ii], hcyst = -1;
-	long double hMass = -am_wght['C'] + MCYST;
-	cout << i << endl;
-	done.assign(peaks.size(), 0);
-	seg_num = 0;
-
-	for (int rpos = i; rpos >= 0; rpos--){
-		char ch = ant.hchain[rpos];
-		if (ch == 'C') hcyst++;
-		hMass += am_wght[ch];
-		peak_search(hMass, hcyst - 1, rpos, ii);
-	}
+	forn(i, done.size())
+		if (done[i]) seg_num++;
 
 }

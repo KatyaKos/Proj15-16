@@ -3,6 +3,8 @@
 
 using namespace std;
 
+extern vector<long double> peaks;
+
 struct Atom{
 	int numH2O, numNH3, numCyst;
 	pair <int, int> seg;
@@ -17,26 +19,28 @@ class Antibody;
 
 class Chains{
 protected:
-	const Antibody& ant;
+	Antibody& ant;
+
 	int check(long double m, int j);
+	void peak_search(um_lda& seg, vector<int>& done, const string& chain, long double delta, int pos);
 public:
 	int seg_num;
 	vector<int> done;
-
 	um_ldld mass_seg;
 
-	Chains(const Antibody& ant): ant(ant), seg_num(0) {}
+	Chains(Antibody& ant): ant(ant), seg_num(0){
+		done.assign(peaks.size(), 0);
+	}
 };
 
 class NonModChains: public Chains{
 private:
 	string chain;
-	void peak_search(long double delta, int pos);
 public:
 	um_lda seg;
 
 	NonModChains() = default;
-	NonModChains(const Antibody& ant, string chain): Chains(ant), chain(chain) {}
+	NonModChains(Antibody& ant, string chain): Chains(ant), chain(chain) {}
 	NonModChains(const NonModChains& c): Chains(c.ant){
 		done = c.done;
 		chain = c.chain;
@@ -50,8 +54,7 @@ public:
 
 class ModifiedChains: public Chains{
 private:
-	void peak_search(long double delta, int cyst, int pos, int nC);
-	int light_peak_search(long double delta, int pos, int j);
+	void heavy_search(long double mass, int nH, int nN, int nC, int pos);
 public:
 	int nhcyst;
 
@@ -59,7 +62,7 @@ public:
 	um_lda seg_heavy;
 
 	ModifiedChains() = default;
-	ModifiedChains(const Antibody& ant, int i): Chains(ant), nhcyst(i) {}
+	ModifiedChains(Antibody& ant, int i): Chains(ant), nhcyst(i) {}
 	ModifiedChains& operator=(const ModifiedChains& c){
 		Chains(c.ant);
 		done = c.done;
@@ -68,12 +71,13 @@ public:
 		mass_seg = c.mass_seg;
 	}
 
-	void chain_process(int ii);
+	void chain_process();
 };
 
 class Antibody{
 private:
 	void C_preprocess();
+	ModifiedChains unite;
 public:
 	string lchain, hchain;
 	int light_num, heavy_num, mod_num;
@@ -84,8 +88,8 @@ public:
 	NonModChains hseg;
 
 	Antibody() = default;
-	Antibody(string lch, string hch): light_num(0), heavy_num(0), mod_num(0), lchain(lch), hchain(hch), lseg(*this, lch), hseg(*this, hch) {}
-	Antibody(const Antibody& ant): lchain(ant.lchain), hchain(ant.hchain), lseg(ant.lseg), hseg(ant.hseg) {
+	Antibody(string lch, string hch): unite(*this, -1), light_num(0), heavy_num(0), mod_num(0), lchain(lch), hchain(hch), lseg(*this, lch), hseg(*this, hch) {}
+	Antibody(const Antibody& ant): unite(ant.unite), lchain(ant.lchain), hchain(ant.hchain), lseg(ant.lseg), hseg(ant.hseg) {
 		posC_heavy = ant.posC_heavy, posC_light = ant.posC_light;
 		mod_seg = ant.mod_seg;
 		light_num = ant.light_num, heavy_num = ant.heavy_num, mod_num = ant.mod_num;

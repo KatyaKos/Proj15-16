@@ -11,6 +11,7 @@
 
 #define forn(i, n) for (int i = 0; i < n; i++)
 
+const int BUFFN = 50;
 const long double MNH3 = 17.03052;
 const long double MH2O = 18.01528;
 const long double MCYST = -2.01565;
