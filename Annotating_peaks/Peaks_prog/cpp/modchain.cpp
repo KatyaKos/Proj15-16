@@ -2,7 +2,7 @@
 
 using namespace std;
 
-void ModifiedChains::heavy_search(long double mass, int nH, int nN, int nC, int pos){
+void ModChains::heavy_search(long double mass, int nH, int nN, int nC, int pos){
 	string chain = ant.hchain;
 	int n = chain.size(), psz = done.size(), nl = ant.lchain.size();
 
@@ -37,7 +37,7 @@ void ModifiedChains::heavy_search(long double mass, int nH, int nN, int nC, int 
 	}
 }
 
-void ModifiedChains::chain_process(){
+void ModChains::chain_process(){
 	string chain = ant.lchain;
 
 	int n = chain.size();

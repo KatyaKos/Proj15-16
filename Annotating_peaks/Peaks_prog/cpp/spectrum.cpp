@@ -76,7 +76,7 @@ inline void Spectrum::print_pict_peak(const Atom& at, const string& chain){
 	
 }
 
-void Spectrum::connect(bool (*comp)(const ModifiedChains&, const ModifiedChains&)){
+void Spectrum::connect(bool (*comp)(const ModChains&, const ModChains&)){
 	sort(ant.mod_seg.begin(), ant.mod_seg.end(), comp);
 	int nm = ant.mod_seg.size();
 
@@ -111,9 +111,6 @@ void Spectrum::where_is_cyst(int ci){
 		if (lh <= i && rh >= i){
 			n++;
 			fout << peak << ":  "; print_mod_peak(atl, ath); fout << endl;
-			//string lost = lost_atoms(ath.numH2O + atl.numH2O, ath.numNH3 + atl.numNH3, ath.numCyst + atl.numCyst);
-
-			//fout << peak << ":  ly" + to_string(ll) + "+S-S+hi(" + to_string(lh) + '-' + to_string(rh) + ')' + lost << endl;
 			fout << "LC:  ";
 			int lcyst = -1, hcyst = -1, ncyst = ath.numCyst + atl.numCyst;
 			for (int i = ll - 1; i < lsz; i++){
@@ -170,9 +167,7 @@ void Spectrum::lonely_cyst(int ci){
 				}
 
 			if (flag) continue;
-			string lost = lost_atoms(ath.numH2O + atl.numH2O, ath.numNH3 + atl.numNH3, ath.numCyst + atl.numCyst);
-
-			fout << setw(36) << right << "ly" + to_string(atl.seg.first) + "+S-S+hi(" + to_string(ath.seg.first) + '-' + to_string(ath.seg.second) + ')' + lost << endl;
+			fout << peak << ":  "; print_mod_peak(atl, ath); fout << endl;
 			n++;
 		}
 	}
@@ -215,7 +210,7 @@ void Spectrum::print_cyst_group(int nC){
 	fout << endl << "CYSTEIN " << nC + 1 << endl;
 	fout << "------------------------------------------" << endl;
 
-	ModifiedChains mc = ant.mod_seg[nC];
+	ModChains mc = ant.mod_seg[nC];
 	um_lda seg_light = mc.seg_light;
 	um_lda seg_heavy = mc.seg_heavy;
 	int nsz = peaks.size();
@@ -267,7 +262,7 @@ void Spectrum::print_cyst_group(int nC){
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-void Spectrum::Annotate(bool (*comp)(const ModifiedChains&, const ModifiedChains&)){
+void Spectrum::Annotate(bool (*comp)(const ModChains&, const ModChains&)){
 
 	fout.open(annot);
 
@@ -310,7 +305,7 @@ void Spectrum::Annotate(bool (*comp)(const ModifiedChains&, const ModifiedChains
 
 }
 
-void Spectrum::Pict_Annotate(bool (*comp)(const ModifiedChains&, const ModifiedChains&)){
+void Spectrum::Pict_Annotate(bool (*comp)(const ModChains&, const ModChains&)){
 
 	fout.open(pict);
 
@@ -362,7 +357,7 @@ void Spectrum::Pict_Annotate(bool (*comp)(const ModifiedChains&, const ModifiedC
 
 }
 
-void Spectrum::Segments_Cover(bool (*comp)(const ModifiedChains&, const ModifiedChains&)){
+void Spectrum::Segments_Cover(bool (*comp)(const ModChains&, const ModChains&)){
 	fout.open(segm);
 
 	connect(comp);
@@ -388,7 +383,7 @@ void Spectrum::Segments_Cover(bool (*comp)(const ModifiedChains&, const Modified
 	fout.close();
 }
 
-void Spectrum::Modified_Annotate(bool (*comp)(const ModifiedChains&, const ModifiedChains&)){
+void Spectrum::Modified_Annotate(bool (*comp)(const ModChains&, const ModChains&)){
 	fout.open(modif);
 
 	connect(comp);

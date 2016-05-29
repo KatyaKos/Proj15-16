@@ -24,7 +24,7 @@ private:
 	void print_mod_peak(const Atom& atl, const Atom& ath);
 	void print_pict_peak(const Atom& at, const string& chain);
 
-	void connect(bool (*comp)(const ModifiedChains&, const ModifiedChains&));
+	void connect(bool (*comp)(const ModChains&, const ModChains&));
 
 	void where_is_cyst(int ci);
 	void lonely_cyst(int ci);
@@ -39,10 +39,10 @@ public:
 		ant = anti;
 		mod_pos.assign(peaks.size(), -1);
 	}
-	void Annotate(bool (*comp)(const ModifiedChains&, const ModifiedChains&));
-	void Pict_Annotate(bool (*comp)(const ModifiedChains&, const ModifiedChains&));
-	void Segments_Cover(bool (*comp)(const ModifiedChains&, const ModifiedChains&));
-	void Modified_Annotate(bool (*comp)(const ModifiedChains&, const ModifiedChains&));
+	void Annotate(bool (*comp)(const ModChains&, const ModChains&));
+	void Pict_Annotate(bool (*comp)(const ModChains&, const ModChains&));
+	void Segments_Cover(bool (*comp)(const ModChains&, const ModChains&));
+	void Modified_Annotate(bool (*comp)(const ModChains&, const ModChains&));
 };
 
 #endif

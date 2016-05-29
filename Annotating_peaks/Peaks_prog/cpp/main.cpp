@@ -27,7 +27,7 @@ void check_file(string name){
 
 
 
-bool comp(const ModifiedChains& a, const ModifiedChains& b){
+bool comp(const ModChains& a, const ModChains& b){
 	if (a.nhcyst == 4) return 1;
 	if (b.nhcyst == 4) return 0;
 	return (a.seg_num > b.seg_num);

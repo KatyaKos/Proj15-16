@@ -59,7 +59,7 @@ public:
 	void chain_process();
 };
 
-class ModifiedChains: public Chains{
+class ModChains: public Chains{
 private:
 	void heavy_search(long double mass, int nH, int nN, int nC, int pos);
 public:
@@ -68,8 +68,8 @@ public:
 	um_lda seg_light;
 	um_lda seg_heavy;
 
-	ModifiedChains(Antibody& ant, int i): Chains(ant), nhcyst(i) {}
-	ModifiedChains& operator=(const ModifiedChains& c){
+	ModChains(Antibody& ant, int i): Chains(ant), nhcyst(i) {}
+	ModChains& operator=(const ModChains& c){
 		Chains(c.ant);
 		done = c.done;
 		seg_num = c.seg_num, nhcyst = c.nhcyst;
@@ -83,13 +83,13 @@ public:
 class Antibody{
 private:
 	void C_preprocess();
-	ModifiedChains unite;
+	ModChains unite;
 public:
 	string lchain, hchain;
 	int light_num, heavy_num, mod_num;
 	vector<int> posC_heavy, posC_light;
 
-	vector<ModifiedChains> mod_seg;
+	vector<ModChains> mod_seg;
 	NonModChains lseg;
 	NonModChains hseg;
 

@@ -4,5 +4,4 @@
 #include "info.h"
 #include "myconsts.h"
 
-
 #endif

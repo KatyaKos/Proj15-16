@@ -23,7 +23,7 @@ void Antibody::Calculate(){
 	int nhC = posC_heavy.size();
 	if (!nhC) return;
 	forn(ii, nhC)
-		mod_seg.push_back(ModifiedChains(*this, ii));
+		mod_seg.push_back(ModChains(*this, ii));
 
 	reverse(lchain.begin(), lchain.end());
 	unite.chain_process();

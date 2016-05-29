@@ -2617,11 +2617,11 @@ IN TOTAL: 373
 
 MODIFIED SEGMENTS THAT CONTAIN ONLY FIFTH CYSTEIN:
 
-     ly214+S-S+hi(217-226)-2H2O-2NH3
-          ly212+S-S+hi(216-227)-2H2O
-          ly212+S-S+hi(216-227)-2H2O
-           ly214+S-S+hi(214-227)-NH3
-          ly214+S-S+hi(204-225)-2H2O
+1164.479:         ly1+S-S+hi(217-226)-2H2O-2NH3
+1775.88162:              ly3+S-S+hi(216-227)-2H2O
+1793.886425:              ly3+S-S+hi(216-227)-2H2O
+1858.920313:               ly1+S-S+hi(214-227)-NH3
+2559.270357:              ly1+S-S+hi(204-225)-2H2O
 
 IN TOTAL: 5
 
