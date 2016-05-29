@@ -1,11 +1,9 @@
-all: bin/main.o bin/printer.o bin/modchain.o bin/nonmodChain.o bin/antibody.o bin/chain.o bin/reader.o
-	g++ -std=c++11 -o prog bin/main.o bin/printer.o bin/modchain.o bin/nonmodChain.o bin/reader.o bin/antibody.o bin/chain.o
+all: bin/main.o bin/modchain.o bin/nonmodChain.o bin/antibody.o bin/chain.o bin/spectrum.o
+	g++ -std=c++11 -o prog bin/main.o bin/modchain.o bin/nonmodChain.o bin/spectrum.o bin/antibody.o bin/chain.o
 bin/main.o: cpp/main.cpp headers/headers.h
 	g++ -std=c++11 -c cpp/main.cpp -o bin/main.o
-bin/printer.o: cpp/printer.cpp headers/headers.h
-	g++ -std=c++11 -c cpp/printer.cpp -o bin/printer.o
-bin/reader.o: cpp/reader.cpp headers/headers.h
-	g++ -std=c++11 -c cpp/reader.cpp -o bin/reader.o
+bin/spectrum.o: cpp/spectrum.cpp headers/headers.h
+	g++ -std=c++11 -c cpp/spectrum.cpp -o bin/spectrum.o
 bin/antibody.o: cpp/antibody.cpp headers/headers.h
 	g++ -std=c++11 -c cpp/antibody.cpp -o bin/antibody.o
 bin/chain.o: cpp/chain.cpp headers/headers.h

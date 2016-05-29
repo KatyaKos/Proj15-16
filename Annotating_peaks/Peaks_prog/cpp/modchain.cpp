@@ -46,12 +46,12 @@ void ModifiedChains::chain_process(){
 
 	while (cyst == -1 && pos < n){
 		char ch = chain[pos];
-		mass += am_wght[ch];
+		mass += am_wght.find(ch)->second;
 		if (ch == 'C') cyst++;
 		pos++;
 	}
 	if (cyst == -1) return;
-	pos--; mass -=am_wght['C']; cyst--;
+	pos--; mass -=am_wght.find('C')->second; cyst--;
 
 	for(int i = pos; i < n; i++){
 
@@ -61,7 +61,7 @@ void ModifiedChains::chain_process(){
 		if (ch == 'C'){
 			cyst++;
 		}
-		mass += am_wght[ch];
+		mass += am_wght.find(ch)->second;
 		
 		forn(ic, cyst / 2 + 1){
 

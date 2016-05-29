@@ -32,7 +32,7 @@ void Chains::peak_search(um_lda& seg, vector<int>& done, const string& chain, lo
 		if (ch == 'C'){
 			cyst++;
 		}
-		mass += am_wght[ch];
+		mass += am_wght.find(ch)->second;
 		
 		int flag = 0;
 		

@@ -39,9 +39,16 @@ private:
 public:
 	um_lda seg;
 
-	NonModChains() = default;
 	NonModChains(Antibody& ant, string chain): Chains(ant), chain(chain) {}
 	NonModChains(const NonModChains& c): Chains(c.ant){
+		done = c.done;
+		chain = c.chain;
+		seg = c.seg;
+		seg_num = c.seg_num;
+		mass_seg = c.mass_seg;
+	}
+	NonModChains& operator=(const NonModChains& c){
+		Chains(c.ant);
 		done = c.done;
 		chain = c.chain;
 		seg = c.seg;
@@ -61,7 +68,6 @@ public:
 	um_lda seg_light;
 	um_lda seg_heavy;
 
-	ModifiedChains() = default;
 	ModifiedChains(Antibody& ant, int i): Chains(ant), nhcyst(i) {}
 	ModifiedChains& operator=(const ModifiedChains& c){
 		Chains(c.ant);
@@ -87,9 +93,17 @@ public:
 	NonModChains lseg;
 	NonModChains hseg;
 
-	Antibody() = default;
+	Antibody(): light_num(0), heavy_num(0), mod_num(0), unite(*this, -1), lseg(*this, lchain), hseg(*this, hchain) {}
 	Antibody(string lch, string hch): unite(*this, -1), light_num(0), heavy_num(0), mod_num(0), lchain(lch), hchain(hch), lseg(*this, lch), hseg(*this, hch) {}
 	Antibody(const Antibody& ant): unite(ant.unite), lchain(ant.lchain), hchain(ant.hchain), lseg(ant.lseg), hseg(ant.hseg) {
+		posC_heavy = ant.posC_heavy, posC_light = ant.posC_light;
+		mod_seg = ant.mod_seg;
+		light_num = ant.light_num, heavy_num = ant.heavy_num, mod_num = ant.mod_num;
+	}
+	Antibody& operator=(const Antibody& ant){
+		unite = ant.unite;
+		lchain = ant.lchain; hchain = ant.hchain;
+		lseg = ant.lseg; hseg = ant.hseg;
 		posC_heavy = ant.posC_heavy, posC_light = ant.posC_light;
 		mod_seg = ant.mod_seg;
 		light_num = ant.light_num, heavy_num = ant.heavy_num, mod_num = ant.mod_num;

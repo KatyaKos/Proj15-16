@@ -2,7 +2,41 @@
 
 using namespace std;
 
-inline string Printer::lost_atoms(int h, int n, int c){
+void Spectrum::Read(){
+	string tmpin(anti), tmpout;
+	int i = tmpin.size() - 7;
+	while (tmpin[i] != '/' && i >= 0) i--;
+	i++;
+	tmpin = tmpin.substr(i, tmpin.size() - 6 - i);
+	tmpout = "results/annotated_" + tmpin + ".txt";
+	annot = tmpout;
+	tmpout = "results/pictured_" + tmpin + ".txt";
+	pict = tmpout;
+	tmpout = "results/modified_" + tmpin + ".txt";
+	modif = tmpout;
+	tmpout = "results/cys_process_" + tmpin + ".txt";
+	segm = tmpout;
+	Read_peaks();
+}
+
+void Spectrum::Read_peaks(){
+	fin.open(spect);
+	string buff;
+	forn(i, 6){
+		getline(fin, buff);
+	}
+	long double d;
+
+	while (fin >> d){
+		peaks.push_back(d);
+		fin >> d >> d;
+	}
+
+	sort(peaks.begin(), peaks.end());
+	fin.close();
+}
+
+inline string Spectrum::lost_atoms(int h, int n, int c){
 	string lost = "";
 	if (h == 1) lost += "-H2O";
 	else if (h > 1) lost += "-" + to_string(h) + "H2O";
@@ -14,7 +48,7 @@ inline string Printer::lost_atoms(int h, int n, int c){
 	return lost;
 }
 
-inline void Printer::print_seg_peak(const Atom& at, int n){
+inline void Spectrum::print_seg_peak(const Atom& at, int n){
 	int i = at.seg.first, j = at.seg.second;
 	if (i){
 		string lost = lost_atoms(at.numH2O, at.numNH3, at.numCyst);			
@@ -26,7 +60,7 @@ inline void Printer::print_seg_peak(const Atom& at, int n){
 	}else fout << setw(36) << right << "None";
 }
 
-inline void Printer::print_mod_peak(const Atom& atl, const Atom& ath){
+inline void Spectrum::print_mod_peak(const Atom& atl, const Atom& ath){
 	int nl = ant.lchain.size();
 	string lost = lost_atoms(ath.numH2O + atl.numH2O, ath.numNH3 + atl.numNH3, ath.numCyst + atl.numCyst);
 	//cout << atl.seg.first << ' ' << nl - atl.seg.first + 1 << endl;
@@ -34,7 +68,7 @@ inline void Printer::print_mod_peak(const Atom& atl, const Atom& ath){
 			
 }
 
-inline void Printer::print_pict_peak(const Atom& at, const string& chain){
+inline void Spectrum::print_pict_peak(const Atom& at, const string& chain){
 	int i = at.seg.first, j = at.seg.second;
 	if (i){
 		fout << chain.substr(i - 1, j - i + 1);
@@ -42,7 +76,7 @@ inline void Printer::print_pict_peak(const Atom& at, const string& chain){
 	
 }
 
-void Printer::connect(bool (*comp)(const ModifiedChains&, const ModifiedChains&)){
+void Spectrum::connect(bool (*comp)(const ModifiedChains&, const ModifiedChains&)){
 	sort(ant.mod_seg.begin(), ant.mod_seg.end(), comp);
 	int nm = ant.mod_seg.size();
 
@@ -58,10 +92,10 @@ void Printer::connect(bool (*comp)(const ModifiedChains&, const ModifiedChains&)
 			}
 		}
 	}
-	//forn(i, mod_pos.size()) cout << mod_pos[i] << '\n';
+
 }
 
-void Printer::where_is_cyst(int ci){
+void Spectrum::where_is_cyst(int ci){
 	string lchain = ant.lchain, hchain = ant.hchain;
 	int i = ant.posC_heavy[ci], psz = ant.posC_heavy.size(), lsz = lchain.size(), hsz = hchain.size();
 
@@ -76,12 +110,13 @@ void Printer::where_is_cyst(int ci){
 
 		if (lh <= i && rh >= i){
 			n++;
-			string lost = lost_atoms(ath.numH2O + atl.numH2O, ath.numNH3 + atl.numNH3, ath.numCyst + atl.numCyst);
+			fout << peak << ":  "; print_mod_peak(atl, ath); fout << endl;
+			//string lost = lost_atoms(ath.numH2O + atl.numH2O, ath.numNH3 + atl.numNH3, ath.numCyst + atl.numCyst);
 
-			fout << peak << ":  ly" + to_string(ll) + "+S-S+hi(" + to_string(lh) + '-' + to_string(rh) + ')' + lost << endl;
+			//fout << peak << ":  ly" + to_string(ll) + "+S-S+hi(" + to_string(lh) + '-' + to_string(rh) + ')' + lost << endl;
 			fout << "LC:  ";
 			int lcyst = -1, hcyst = -1, ncyst = ath.numCyst + atl.numCyst;
-			for (int i = lsz - ll; i < lsz; i++){
+			for (int i = ll - 1; i < lsz; i++){
 				fout << lchain[i];
 				if (lchain[i] == 'C') lcyst++;
 			}
@@ -114,7 +149,7 @@ void Printer::where_is_cyst(int ci){
 	fout << endl << "IN TOTAL: " << n << endl;
 }
 
-void Printer::lonely_cyst(int ci){
+void Spectrum::lonely_cyst(int ci){
 
 	int i = ant.posC_heavy[ci], psz = ant.posC_heavy.size();
 	int n = 0;
@@ -145,7 +180,7 @@ void Printer::lonely_cyst(int ci){
 
 }
 
-pair<int, int> Printer::LRtest(int ci){
+pair<int, int> Spectrum::LRtest(int ci){
 	int i = ant.posC_heavy[ci], psz = ant.posC_heavy.size();
 	int nseg = 0, n = 0, no = 0;
 
@@ -176,7 +211,7 @@ pair<int, int> Printer::LRtest(int ci){
 }
 
 
-void Printer::print_cyst_group(int nC){
+void Spectrum::print_cyst_group(int nC){
 	fout << endl << "CYSTEIN " << nC + 1 << endl;
 	fout << "------------------------------------------" << endl;
 
@@ -232,9 +267,9 @@ void Printer::print_cyst_group(int nC){
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-void Printer::Annotate(bool (*comp)(const ModifiedChains&, const ModifiedChains&)){
+void Spectrum::Annotate(bool (*comp)(const ModifiedChains&, const ModifiedChains&)){
 
-	fout.open(ANNOT_FILE);
+	fout.open(annot);
 
 	fout << "\nFirst column -- peaks, second -- light chain segment, third -- heavy chain segment, fourth -- modified segment\n\n";
 
@@ -275,9 +310,9 @@ void Printer::Annotate(bool (*comp)(const ModifiedChains&, const ModifiedChains&
 
 }
 
-void Printer::Pict_Annotate(bool (*comp)(const ModifiedChains&, const ModifiedChains&)){
+void Spectrum::Pict_Annotate(bool (*comp)(const ModifiedChains&, const ModifiedChains&)){
 
-	fout.open(PICT_FILE);
+	fout.open(pict);
 
 	fout << "\nOne block -- one peak. First raw in block -- peak, second-third -- light chain segment, fourth-fifth -- heavy chain segment, sixth-seventh -- modified segment\n\n";
 
@@ -327,8 +362,8 @@ void Printer::Pict_Annotate(bool (*comp)(const ModifiedChains&, const ModifiedCh
 
 }
 
-void Printer::Segments_Cover(bool (*comp)(const ModifiedChains&, const ModifiedChains&)){
-	fout.open(CYS_PROCESS_FILE);
+void Spectrum::Segments_Cover(bool (*comp)(const ModifiedChains&, const ModifiedChains&)){
+	fout.open(segm);
 
 	connect(comp);
 
@@ -353,8 +388,8 @@ void Printer::Segments_Cover(bool (*comp)(const ModifiedChains&, const ModifiedC
 	fout.close();
 }
 
-void Printer::Modified_Annotate(bool (*comp)(const ModifiedChains&, const ModifiedChains&)){
-	fout.open(MOD_FILE);
+void Spectrum::Modified_Annotate(bool (*comp)(const ModifiedChains&, const ModifiedChains&)){
+	fout.open(modif);
 
 	connect(comp);
 	int nC = ant.posC_heavy.size();

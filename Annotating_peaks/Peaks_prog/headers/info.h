@@ -9,18 +9,13 @@ using namespace std;
 extern ifstream fin;
 extern ofstream fout;
 
-extern unordered_map<char, long double> am_wght;
-
-class Reader{
+class Spectrum{
 private:
-	void Read_weights();
+	string spect, anti;
+	string annot, modif, pict, segm;
+
 	void Read_peaks();
-public:
-	void Read();
-};
 
-class Printer{
-private:
 	Antibody ant;
 	vector<int> mod_pos;
 
@@ -36,12 +31,14 @@ private:
 	pair<int, int> LRtest(int ci);
 
 	void print_cyst_group(int nC);
-
 public:
-	Printer(Antibody ant): ant(ant) {
+	Spectrum(string s, string a): spect(s), anti(a) {}
+
+	void Read();
+	void set_antibody(Antibody anti){
+		ant = anti;
 		mod_pos.assign(peaks.size(), -1);
 	}
-
 	void Annotate(bool (*comp)(const ModifiedChains&, const ModifiedChains&));
 	void Pict_Annotate(bool (*comp)(const ModifiedChains&, const ModifiedChains&));
 	void Segments_Cover(bool (*comp)(const ModifiedChains&, const ModifiedChains&));
